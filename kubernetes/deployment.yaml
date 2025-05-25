@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-form
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-form
+  template:
+    metadata:
+      labels:
+        app: flask-form
+    spec:
+      containers:
+      - name: flask-container
+        image: flask-form-app:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
