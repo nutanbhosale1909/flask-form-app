@@ -1,0 +1,70 @@
+################################### step 1 buiding docker image ##############################################
+
+(venv) root@ip-172-31-8-166:~/flask-app# docker build -t flask-form-app .
+DEPRECATED: The legacy builder is deprecated and will be removed in a future release.
+            Install the buildx component to build images with BuildKit:
+            https://docs.docker.com/go/buildx/
+
+Sending build context to Docker daemon  8.173MB
+Step 1/6 : FROM python:3.10-slim
+3.10-slim: Pulling from library/python
+61320b01ae5e: Pull complete 
+f7abc9c34473: Pull complete 
+40f0d24c02c5: Pull complete 
+58f8b341ff7d: Pull complete 
+Digest: sha256:49454d2bf78a48f217eb25ecbcb4b5face313fea6a6e82706465a6990303ada2
+Status: Downloaded newer image for python:3.10-slim
+ ---> e6d8b768c22f
+Step 2/6 : WORKDIR /app
+ ---> Running in a9ac078bca2b
+ ---> Removed intermediate container a9ac078bca2b
+ ---> 2d50967d2b11
+Step 3/6 : COPY . /app
+ ---> 03cb8e053101
+Step 4/6 : RUN pip install --no-cache-dir flask
+ ---> Running in 355046c108bc
+Collecting flask
+  Downloading flask-3.1.1-py3-none-any.whl (103 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 103.3/103.3 kB 52.4 MB/s eta 0:00:00
+Collecting blinker>=1.9.0
+  Downloading blinker-1.9.0-py3-none-any.whl (8.5 kB)
+Collecting jinja2>=3.1.2
+  Downloading jinja2-3.1.6-py3-none-any.whl (134 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 134.9/134.9 kB 319.8 MB/s eta 0:00:00
+Collecting itsdangerous>=2.2.0
+  Downloading itsdangerous-2.2.0-py3-none-any.whl (16 kB)
+Collecting markupsafe>=2.1.1
+  Downloading MarkupSafe-3.0.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (20 kB)
+Collecting werkzeug>=3.1.0
+  Downloading werkzeug-3.1.3-py3-none-any.whl (224 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 224.5/224.5 kB 387.6 MB/s eta 0:00:00
+Collecting click>=8.1.3
+  Downloading click-8.2.1-py3-none-any.whl (102 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 102.2/102.2 kB 273.3 MB/s eta 0:00:00
+Installing collected packages: markupsafe, itsdangerous, click, blinker, werkzeug, jinja2, flask
+Successfully installed blinker-1.9.0 click-8.2.1 flask-3.1.1 itsdangerous-2.2.0 jinja2-3.1.6 markupsafe-3.0.2 werkzeug-3.1.3
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 23.0.1 -> 25.1.1
+[notice] To update, run: pip install --upgrade pip
+ ---> Removed intermediate container 355046c108bc
+ ---> c6922ea309d6
+Step 5/6 : EXPOSE 5000
+ ---> Running in e8d7419b538a
+ ---> Removed intermediate container e8d7419b538a
+ ---> 0cf47d873ae0
+Step 6/6 : CMD ["python", "app.py"]
+ ---> Running in c7e4daa835bb
+ ---> Removed intermediate container c7e4daa835bb
+ ---> c205f1ec0cc4
+Successfully built c205f1ec0cc4
+Successfully tagged flask-form-app:latest
+
+
+
+#################################################  step 2: ##################################
+
+(venv) root@ip-172-31-8-166:~/flask-app# docker run -d -p 5000:5000 flask-form-app
+2cbdbaed7f01659861cabfb8748fb8d64bed9367438e5251809c3f304f75033d
+
+
