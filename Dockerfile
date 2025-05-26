@@ -1,17 +1,20 @@
-# Use an official Python runtime as a parent image
+# Use official Python image
 FROM python:3.10-slim
 
-# Set working directory
+# Set working directory inside container (this is absolute path inside container)
 WORKDIR /app
 
-# Copy app files
-COPY . /app
+# Copy only requirements.txt first (for caching)
+COPY app/requirements.txt /app/
 
 # Install dependencies
-RUN pip install --no-cache-dir flask
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the app port
+# Copy app source code into container
+COPY app/ /app/
+
+# Expose Flask port
 EXPOSE 5000
 
-# Command to run the app
+# Run the app
 CMD ["python", "app.py"]
