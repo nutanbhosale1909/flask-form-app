@@ -1,4 +1,5 @@
 name: Docker CI/CD
+
 on:
   push:
     branches: [main]
@@ -6,74 +7,31 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout code
-      uses: actions/checkout@v4
-      
+      uses: actions/checkout@v3
+
     - name: Login to Docker Hub
       uses: docker/login-action@v3
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        
+
     - name: Build and push image
       run: |
         docker build -t nutan1909/flask-form-app:latest .
         docker push nutan1909/flask-form-app:latest
-        
+
     - name: Deploy to EC2
-      uses: appleboy/ssh-action@v1.0.3
+      uses: appleboy/ssh-action@v1.0.0
       with:
         host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}  # Changed from root
+        username: root
         key: ${{ secrets.EC2_SSH_KEY }}
-        port: 22
-        timeout: 60s
         script: |
-          # Update system and install Docker if not present
-          sudo apt-get update || true
-          
-          # Check if Docker is running
-          sudo systemctl start docker
-          sudo systemctl enable docker
-          
-          # Add user to docker group if not already added
-          sudo usermod -aG docker $USER || true
-          
-          # Pull the latest image
-          sudo docker pull nutan1909/flask-form-app:latest
-          
-          # Stop and remove existing container
-          sudo docker stop flask-app || true
-          sudo docker rm flask-app || true
-          
-          # Remove old images to free up space
-          sudo docker image prune -f || true
-          
-          # Run new container with proper error handling
-          sudo docker run -d \
-            --name flask-app \
-            --restart unless-stopped \
-            -p 5000:5000 \
-            --health-cmd="curl -f http://localhost:5000/ || exit 1" \
-            --health-interval=30s \
-            --health-timeout=10s \
-            --health-retries=3 \
-            nutan1909/flask-form-app:latest
-          
-          # Wait for container to start
-          sleep 10
-          
-          # Check if container is running
-          if sudo docker ps | grep -q flask-app; then
-            echo "Container started successfully"
-            sudo docker logs flask-app --tail 20
-          else
-            echo "Container failed to start"
-            sudo docker logs flask-app --tail 50
-            exit 1
-          fi
-          
-          # Restart nginx
-          sudo systemctl restart nginx
-          sudo systemctl status nginx
+          docker pull nutan1909/flask-form-app:latest
+          docker stop flask-app || true
+          docker rm flask-app || true
+          docker run -d --name flask-app -p 5000:5000 nutan1909/flask-form-app:latest
+          systemctl restart nginx
