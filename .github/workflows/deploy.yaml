@@ -27,7 +27,7 @@ jobs:
       uses: appleboy/ssh-action@v1.0.0
       with:
         host: ${{ secrets.EC2_HOST }}
-        username: root
+        username: ubuntu
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           docker pull nutan1909/flask-form-app:latest
