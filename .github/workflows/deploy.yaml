@@ -1,27 +1,22 @@
-name: Docker CI/CD
+name: Docker CI
 
 on:
   push:
-    branches: [ main ]  # or 'master', whichever your default branch is
-  pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-
-    - name: Login to Docker Hub
+    - name: Docker Login
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-    - name: Build Docker image
-      run: docker build -t nutan1909/myapp:latest .
+    - name: Build Docker Image
+      run: docker build -t nutan1909/your-image-name:latest .
 
-    - name: Push Docker image
-      run: docker push nutan1909/myapp:latest
+    - name: Push Docker Image
+      run: docker push nutan1909/your-image-name:latest
