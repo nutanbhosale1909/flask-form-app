@@ -19,7 +19,7 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build Docker Image
-      run: docker build -t nutan1909/your-image-name:latest .
+      run: docker build -t nutan1909/flask-form-app:latest .
 
     - name: Push Docker Image
-      run: docker push nutan1909/your-image-name:latest
+      run: docker push nutan1909/flask-form-app:latest
