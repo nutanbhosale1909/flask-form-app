@@ -23,7 +23,7 @@ jobs:
         docker build -t nutan1909/flask-form-app:latest .
         docker push nutan1909/flask-form-app:latest
 
-    - name: Deploy to EC2
+    - name: Deploy to EC2 on aws
       uses: appleboy/ssh-action@v1.0.0
       with:
         host: ${{ secrets.EC2_HOST }}
