@@ -5,8 +5,8 @@ metadata:
 spec:
   type: NodePort
   selector:
-    app: flask-form
+    app: flask-app
   ports:
-  - port: 80
-    targetPort: 5000
-    nodePort: 30080
+    - port: 80
+      targetPort: 5000
+      nodePort: 30080
