@@ -44,12 +44,11 @@ resource "aws_instance" "web" {
 }
 
 # Optionally, create and attach an Elastic IP
-resource "aws_eip" "web_eip" {
+resource "aws_eip" "static_ip" {
   instance = aws_instance.web.id
   vpc      = true
 }
 
-# Output the public IP
-output "public_ip" {
-  value = aws_eip.web_eip.public_ip
+output "elastic_ip" {
+  value = aws_eip.static_ip.public_ip
 }
