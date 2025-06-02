@@ -33,10 +33,23 @@ resource "aws_instance" "web" {
   ami                    = var.ami
   instance_type          = var.instance_type
   key_name               = var.key_name
+  subnet_id              = var.subnet_id   # Ensure this is defined in your vars
+  associate_public_ip_address = true       # <-- Adds a public IP automatically
   vpc_security_group_ids = [aws_security_group.allow_web.id]
   user_data              = file("setup.sh")
 
   tags = {
     Name = "flask-form-server"
   }
+}
+
+# Optionally, create and attach an Elastic IP
+resource "aws_eip" "web_eip" {
+  instance = aws_instance.web.id
+  vpc      = true
+}
+
+# Output the public IP
+output "public_ip" {
+  value = aws_eip.web_eip.public_ip
 }
